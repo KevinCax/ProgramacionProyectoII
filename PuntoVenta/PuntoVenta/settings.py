@@ -27,9 +27,9 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 SECRET_KEY = 'django-insecure-=p-f-uw=-5+ail3$fk@b5lv@q25ugw1a-zq*k6c-fgnrfbgq1)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['denildev.me']
 
 
 # Application definition
@@ -87,11 +87,11 @@ AUTHENTICATION_BACKENDS = [
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'pVenta',
+        'NAME': 'railway',
         'USER': 'postgres',
-        'PASSWORD': '5267',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'PASSWORD': 'fOSqusQmICxZQqjWmopaOTDLuDJFquHk',
+        'HOST': 'autorack.proxy.rlwy.net',
+        'PORT': '19696',
     }
 }
 
