@@ -10,7 +10,7 @@ from weasyprint.text.fonts import FontConfiguration
 from django.conf import settings
 import os
 from django.db import IntegrityError
-from django.contrib.auth import logout
+from django.contrib.auth import logout, authenticate, login
 from django.shortcuts import redirect
 
 
@@ -21,8 +21,28 @@ def inicio_view(request):
     
     return render(request, 'inicio.html')
 
+
 def login_view(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        
+        try:
+            user = Usuario.objects.get(correoElectronico=email)
+            user = authenticate(request, username=user.usuario, password=password)
+        except Usuario.DoesNotExist:
+            user = None
+        
+        if user is not None:
+            login(request, user)
+            return redirect('Login')
+        else:
+            messages.error(request, 'Credenciales incorrectas.')
+    
     return render(request, 'signin.html')
+        
+    
+        
 
 def logout_view(request):
     return render(request, 'logout.html')
@@ -41,7 +61,7 @@ def clientes_view(request):
         'form_personal': form_personal,
         'form_editar': form_editar
     }
-    return render(request, 'clientes.html', {'clientes': clientes, 'form_personal': form_personal, 'form_editar': form_editar})
+    return render(request, 'clientes.html', {'clientes': clientes, 'form_personal': form_personal, 'form_editar': form_editar, 'user': request.user})
 
 
 def add_cliente_view(request):
@@ -162,9 +182,29 @@ def edit_cliente_view(request):
     return redirect('Clientes')
 
 def delete_cliente_view(request):
-    if request.POST:
-        cliente = Cliente.objects.get(pk=request.POST.get('id_personal_eliminar'))
-        cliente.delete()
+    if request.method == 'POST':
+        nit_Cui_cliente = request.POST.get('nit_Cui')
+        nuevo_estado = request.POST.get('nuevo_estado')
+        print(f"NIT / DPI recibido: {nit_Cui_cliente}")
+        print(f"Nuevo estado: {nuevo_estado}")
+        print(f"POST data: {request.POST}")
+        
+        if nit_Cui_cliente and nuevo_estado:
+            try:
+                cliente = get_object_or_404(Cliente, nit_Cui=nit_Cui_cliente)
+                cliente.estado = nuevo_estado
+                cliente.save()
+                mensaje = f"Cliente {'desactivado' if nuevo_estado == 'inactivo' else 'activado'} con éxito"
+                messages.success(request, mensaje)
+            except cliente.DoesNotExist:
+                messages.error(request, f"No se encontró el Cliente con {nit_Cui_cliente}")
+            except Exception as e:
+                messages.error(request, f"Error al cambiar el estado del Cliente: {str(e)}")
+        else:
+            messages.error(request, "No se proporcionaron datos válidos para actualizar el Cliente")
+    else:
+        messages.error(request, "Método no permitido")
+    
     return redirect('Clientes')
 
 
@@ -202,7 +242,6 @@ def edit_producto_view(request):
     return redirect('Productos')
             
             
-    return redirect('Productos')
 
 def add_producto_view(request):
     if request.method == 'POST':
@@ -217,9 +256,29 @@ def add_producto_view(request):
     return redirect('Productos')
 
 def delete_producto_view(request):
-    if request.POST:
-        producto = Producto.objects.get(pk=request.POST.get('id_producto_eliminar'))
-        producto.delete()
+    if request.method == 'POST':
+        codigo_producto = request.POST.get('codigo')
+        nuevo_estado = request.POST.get('nuevo_estado')
+        print(f"Codigo recibido: {codigo_producto}")
+        print(f"Nuevo estado: {nuevo_estado}")
+        print(f"POST data: {request.POST}")
+        
+        if codigo_producto and nuevo_estado:
+            try:
+                producto = get_object_or_404(Producto, codigo=codigo_producto)
+                producto.estado = nuevo_estado
+                producto.save()
+                mensaje = f"Producto {'desactivado' if nuevo_estado == 'inactivo' else 'activado'} con éxito"
+                messages.success(request, mensaje)
+            except producto.DoesNotExist:
+                messages.error(request, f"No se encontró el Producto con Código {codigo_producto}")
+            except Exception as e:
+                messages.error(request, f"Error al cambiar el estado del Producto: {str(e)}")
+        else:
+            messages.error(request, "No se proporcionaron datos válidos para actualizar el Producto")
+    else:
+        messages.error(request, "Método no permitido")
+    
     return redirect('Productos')
 
 

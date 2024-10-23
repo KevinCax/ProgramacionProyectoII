@@ -79,19 +79,43 @@ function eliminarPreventivo(id) {
   document.getElementById("id_preventivo_eliminar").value = id;
 }*/
 
-function editarProducto(id, cantidad, descripcion, categoria, precio_unitario, costo_unitario, imagen) {
+function editarProducto(id, cantidad, descripcion, categoria, precio_unitario, costo_unitario, imagen_url) {
   document.getElementById("id_producto_editar").value = id;
   document.getElementById("cantidad_editar").value = cantidad;
   document.getElementById("descripcion_editar").value = descripcion;
   document.getElementById("categoria_editar").value = categoria;
   document.getElementById("precio_editar").value = precio_unitario;
   document.getElementById("costo_editar").value = costo_unitario;
-  document.getElementById("imagen_editar").value = imagen;
+
+  if (imagen_url) {
+      document.getElementById("imagen_editar").src = imagen_url;
+  } else {
+      document.getElementById("imagen_editar").src = '';
+  }
 }
 
-function eliminarProducto(id) {
-  document.getElementById("id_producto_eliminar").value = id;
+
+
+function EstadoProducto(codigo, estadoActual) {
+  document.getElementById("codigo_producto").value = codigo;
+  var nuevoEstado = estadoActual === 'activo' ? 'inactivo' : 'activo';
+  document.getElementById("nuevo_estado_producto").value = nuevoEstado;
+  
+  var btnConfirmar = document.getElementById("btn_confirmar_toggle");
+  btnConfirmar.textContent = estadoActual === 'activo' ? 'Desactivar' : 'Activar';
+  btnConfirmar.classList.remove('btn-success', 'btn-danger');
+  btnConfirmar.classList.add(estadoActual === 'activo' ? 'btn-danger' : 'btn-success');
+  
+  $('#ToggleProductoModal').modal('show');
 }
+
+// Agregar este evento para depuración
+document.getElementById("form_toggle_estado").addEventListener("submit", function(event) {
+  console.log("Formulario enviado");
+  console.log("CODIGO:", document.getElementById("codigo_producto").value);
+  console.log("Nuevo estado:", document.getElementById("nuevo_estado_producto").value);
+});
+
 
 function seleccionarCliente(nit, nombre, correo) {
   
@@ -117,26 +141,40 @@ function editarPersonal(id, nombre, correoElectronico, direccion, notas, estado)
   document.getElementById("direccion_editar").value = direccion;
   document.getElementById("notas_editar").value = notas;
 
-  // Alterna el estado del checkbox
-  var estadoCheckbox = document.getElementById("estado_editar");
-  estadoCheckbox.checked = (estado === true || estado === 'true' || estado === 1 || estado === '1');
 }
 
-
-function eliminarPersonal(id) {
-  document.getElementById("id_personal_eliminar").value = id;
+function EstadoClientes(nit_Cui, estadoActual) {
+  document.getElementById("nit_Cui_cliente").value = nit_Cui;
+  var nuevoEstado = estadoActual === 'activo' ? 'inactivo' : 'activo';
+  document.getElementById("nuevo_estado_cliente").value = nuevoEstado;
+  
+  var btnConfirmar = document.getElementById("btn_confirmar_toggle");
+  btnConfirmar.textContent = estadoActual === 'activo' ? 'Desactivar' : 'Activar';
+  btnConfirmar.classList.remove('btn-success', 'btn-danger');
+  btnConfirmar.classList.add(estadoActual === 'activo' ? 'btn-danger' : 'btn-success');
+  
+  $('#ToggleClienteModal').modal('show');
 }
+
+// Agregar este evento para depuración
+document.getElementById("form_toggle_estado").addEventListener("submit", function(event) {
+  console.log("Formulario enviado");
+  console.log("DPI / CUI:", document.getElementById("nit_Cui_cliente").value);
+  console.log("Nuevo estado:", document.getElementById("nuevo_estado_cliente").value);
+});
+
+
 
 function borrarContent(){
   document.getElementById("search").value = "";
 }
 
 function generarCodigo() {
-  fetch('/ruta/a/tu/vista/generar_codigo/')  // Cambia esta ruta a la que corresponda
+  fetch('/ruta/a/tu/vista/generar_codigo/')
       .then(response => response.json())
       .then(data => {
           if (data.codigo) {
-              document.getElementById('id_codigo').value = data.codigo;  // Asegúrate de que el ID coincida con el campo del formulario
+              document.getElementById('id_codigo').value = data.codigo;
           } else {
               alert('Error al generar el código.');
           }
@@ -148,15 +186,9 @@ function generarCodigo() {
 }
 
 
-function editarProducto(id, cantidad, descripcion, categoria, precio_unitario, costo_unitario, imagen) {
-  document.getElementById("id_producto_editar").value = id;
-  document.getElementById("cantidad_editar").value = cantidad;
-  document.getElementById("descripcion_editar").value = descripcion;
-  document.getElementById("categoria_editar").value = categoria;
-  document.getElementById("precio_editar").value = precio_unitario;
-  document.getElementById("costo_editar").value = costo_unitario;
-  document.getElementById("imagen_editar").value = imagen;
-}
+
+
+
 
 
 

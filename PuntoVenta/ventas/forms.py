@@ -89,11 +89,11 @@ class EditarProductoForm(forms.ModelForm):
             'imagen': 'Imagen :',
         }
         widgets = {
-            'cantidad': forms.TextInput(attrs={'type': 'text' , 'id': 'cantidad_editar'}),
+            'cantidad': forms.NumberInput(attrs={'id': 'cantidad_editar'}),
             'descripcion': forms.TextInput(attrs={'id': 'descripcion_editar'}),
             'categoria': forms.TextInput(attrs={'id': 'categoria_editar'}),
-            'precio_unitario': forms.TextInput(attrs={'id': 'precio_editar'}),
-            'costo_unitario': forms.TextInput(attrs={'id': 'costo_editar'}),
+            'precio_unitario': forms.NumberInput(attrs={'id': 'precio_editar'}),
+            'costo_unitario': forms.NumberInput(attrs={'id': 'costo_editar'}),
             'imagen': forms.FileInput(attrs={'id': 'imagen_editar'}),
         }
         

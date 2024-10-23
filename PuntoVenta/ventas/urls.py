@@ -5,7 +5,7 @@ from .views import cerrar_sesion
 
 urlpatterns = [
     path('', views.inicio_view, name='Inicio'),
-    path('login/', views.login_view, name='IniciarSesion'),
+    path('iniciar-sesion/', views.login_view, name='Login'),
     path('cerrar-sesion/', cerrar_sesion, name='CerrarSesion'),
     path('logout/', views.logout_view, name='CrearCuenta'),
     path('clientes/', views.clientes_view, name='Clientes'),

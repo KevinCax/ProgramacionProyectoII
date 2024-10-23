@@ -7,7 +7,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Digital Shop</title>
 
+
+
   <link rel="icon" type="image/x-icon" href="{% static 'index/img/logo3.png' %}">
+
   <!-- Font Awesome -->
   <link rel="stylesheet" href="{% static 'lib/adminlite/plugins/fontawesome-free/css/all.min.css' %}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -88,13 +91,17 @@
                with font-awesome or any other icon font library -->
 
             <li class="nav-header">EMPRESA</li>
-            <li class="nav-item">
+
+            <!--{% if user.rol != "administrador" %} style="display:none;" {% endif %}-->
+            <li class="nav-item" >
               <a href="{% url 'Usuarios' %}" class="nav-link">
                 <i class=" nav-icon fas fa-user-plus"></i>
                 <p>Usuarios</p>
               </a>
             </li>
-            <li class="nav-item">
+            
+            <!--{% if user.rol != "administrador" and user.rol != 'vendedor' and user.rol != 'supervisor' %} style="display:none;" {% endif %}-->
+            <li class="nav-item" class="nav-item" >
               <a href="{% url 'AddVenta' %}" class="nav-link">
                 <i class="nav-icon far fa-calendar-alt"></i>
                 <p>
@@ -102,7 +109,48 @@
                 </p>
               </a>
             </li>
+            
+            <!--{% if user.rol != "administrador" and user.rol != 'vendedor' and user.rol != 'supervisor' and user.rol != 'recepcionista' %} style="display:none;" {% endif %}-->
+            <li class="nav-item" >
+              <a href="{% url 'Clientes' %}" class="nav-link">
+                <i class="nav-icon fas fa-users-cog"></i>
+                <p>Clientes</p>
+              </a>
+            </li>
+            
+              <!-- {% if user.rol != "administrador" and user.rol != 'vendedor' and user.rol != 'supervisor' and user.rol != 'recepcionista' %} style="display:none;" {% endif %} -->
+              <li class="nav-item">
+                <a href="{% url 'Productos' %}" class="nav-link">
+                  <i class="nav-icon fas fa-plus"></i>
+                  <p>
+                    Productos
+                  </p>
+                </a>
+              </li>
 
+
+            <!--<li class="nav-item" >
+                <a href="{% url 'Productos' %}">
+                  <i class="nav-icon fas fa-plus"></i>
+                  <p>Productos</p>
+                </a>
+            </li> -->
+
+            
+            
+            
+
+            <li class="nav-item">
+              <a href="{% url 'CerrarSesion' %}" class="nav-link">
+                <i class="nav-icon fas fa-right-to-bracket"></i>
+                <p>
+                  Cerrar Sesión
+                </p>
+              </a>
+            </li>
+            
+
+            
 
            <!-- <li class="nav-item">
               <a href="" class="nav-link">
@@ -143,29 +191,7 @@
             </li>-->
             <!--<li class="nav-header">EMPRESA</li>-->
 
-            <li class="nav-item">
-              <a href="{% url 'Clientes' %}" class="nav-link">
-                <i class="nav-icon fas fa-users-cog"></i>
-                <p>Clientes</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="{% url 'Productos' %}" class="nav-link">
-                <i class="nav-icon fas fa-plus"></i>
-                <p>
-                  Productos
-                </p>
-              </a>
-            </li>
 
-            <li class="nav-item">
-              <a href="{% url 'CerrarSesion' %}" class="nav-link">
-                <i class="nav-icon fas fa-right-to-bracket"></i>
-                <p>
-                  Cerrar Sesión
-                </p>
-              </a>
-            </li>
 
             <!--<li class="nav-item">
               <a href="" class="nav-link">

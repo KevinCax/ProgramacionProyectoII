@@ -83,23 +83,25 @@
     </div>
 </div>
 
-<div id="EliminarPersonalModal" class="modal">
+<div id="ToggleClienteModal" class="modal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-dark">Eliminar</h5>
+                <h5 class="modal-title text-dark">Cambiar Estado de Cliente</h5>
             </div>
             <div class="modal-body bg-dark text-white">
-                <p class="labelmodal">¿Estás seguro?</p>
-                <form method="POST" action="{% url 'DeleteCliente' %}">{% csrf_token %}
-                    <input type="hidden" id="id_personal_eliminar" name="id_personal_eliminar">
+                <p class="labelmodal">¿Estás seguro que deseas cambiar el estado de este cliente?</p>
+                <form id="form_toggle_estado" method="POST" action="{% url 'DeleteCliente' %}">
+                    {% csrf_token %}
+                    <input type="hidden" id="nit_Cui_cliente" name="nit_Cui" value="">
+                    <input type="hidden" id="nuevo_estado_cliente" name="nuevo_estado" value="">
             </div>
             <div class="modal-footer bg-dark text-white">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">
-                   Volver
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                   Cancelar
                 </button>
-                <button type="submit" class="btn btn-success">
-                    Aceptar
+                <button type="submit" class="btn btn-primary" id="btn_confirmar_toggle">
+                    Confirmar
                 </button>
                 </form>
             </div>
@@ -150,7 +152,9 @@
                                 <i class="fas fa-edit"></i>
                             </button>                            
 
-                            <button onclick="eliminarPersonal('{{i.nit_Cui}}')" class="btn btn-outline-danger btn-sm" data-toggle="modal" href="#EliminarPersonalModal" title="Eliminar">
+                            <button onclick="EstadoClientes('{{ i.nit_Cui }}', '{{ i.estado }}')" 
+                                class="btn btn-outline-{% if i.estado == 'activo' %}danger{% else %}success{% endif %} btn-sm" 
+                                title="Activar/Desactivar">
                                 <i class="fas fa-power-off"></i>
                             </button>
                         </td>

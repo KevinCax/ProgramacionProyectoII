@@ -53,7 +53,7 @@
             </div>
             <div class="modal-body bg-dark text-white">
                 <form method="POST" action="{% url 'EditProducto' %}" enctype="multipart/form-data">{% csrf_token %}
-                    <input type="hidden" name="id_producto_editar"" id="id_producto_editar"">
+                    <input type="hidden" name="id_producto_editar" id="id_producto_editar">
                     {% for field in form_editar %}
                     <p> {{field.label}} <br>
                         {{field|add_class:"form-control"}}</p>
@@ -79,23 +79,25 @@
     </div>
 </div>
 
-<div id="EliminarProductoModal" class="modal">
+<div id="ToggleProductoModal" class="modal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-dark">Eliminar</h5>
+                <h5 class="modal-title text-dark">Cambiar Estado de Producto</h5>
             </div>
             <div class="modal-body bg-dark text-white">
-                <p class="labelmodal">¿Estás seguro?</p>
-                <form method="POST" action="{% url 'DeleteProducto' %}">{% csrf_token %}
-                    <input type="hidden" id="id_producto_eliminar" name="id_producto_eliminar">
+                <p class="labelmodal">¿Estás seguro que deseas cambiar el estado de este producto?</p>
+                <form id="form_toggle_estado" method="POST" action="{% url 'DeleteProducto' %}">
+                    {% csrf_token %}
+                    <input type="hidden" id="codigo_producto" name="codigo" value="">
+                    <input type="hidden" id="nuevo_estado_producto" name="nuevo_estado" value="">
             </div>
             <div class="modal-footer bg-dark text-white">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">
-                   Volver
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                   Cancelar
                 </button>
-                <button type="submit" class="btn btn-success">
-                    Aceptar
+                <button type="submit" class="btn btn-primary" id="btn_confirmar_toggle">
+                    Confirmar
                 </button>
                 </form>
             </div>
@@ -126,6 +128,7 @@
                         <th>Categoría</th>
                         <th>Precio U. GTQ</th>
                         <th>Costo U. GTQ</th>
+                        <th>Estado</th>
                         <th>Imagen</th>
                         <th>Opciones</th>
                     </tr>
@@ -140,18 +143,20 @@
                         <td>{{i.categoria}}</td>
                         <td>{{i.precio_unitario}}</td>
                         <td>{{i.costo_unitario}}</td>
+                        <th>{{i.estado}}</th>
                         {% if i.imagen %}
                         <td><img src="{{i.imagen.url}}" alt="Error" width="50" height="50"></td>
                         {% else %}
                         <td></td>
                         {% endif %}
                         <td>
-                            <button onclick="editarProducto('{{i.codigo}}', '{{i.cantidad}}', '{{i.descripcion}}', '{{i.categoria}}', '{{i.precio_unitario}}', '{{i.costo_unitario}}', '{{i.imagen}}')" class="btn btn-outline-primary btn-sm mb-1" data-toggle="modal" href="#EditarProductoModal" title="Editar">
+                            <button onclick="editarProducto('{{i.codigo}}', '{{i.cantidad}}', '{{i.descripcion}}', '{{i.categoria}}', '{{i.precio_unitario}}', '{{i.costo_unitario}}', '{{i.imagen}}',)" class="btn btn-outline-primary btn-sm mb-1" data-toggle="modal" href="#EditarProductoModal" title="Editar">
                                 <i class="fas fa-edit"></i>
                             </button>
 
-                            <button onclick="eliminarProducto('{{i.codigo}}')" class="btn btn-outline-danger btn-sm"
-                                data-toggle="modal" href="#EliminarProductoModal" title="Eliminar"> 
+                            <button onclick="EstadoProducto('{{ i.codigo }}', '{{ i.estado }}')" 
+                                class="btn btn-outline-{% if i.estado == 'activo' %}danger{% else %}success{% endif %} btn-sm" 
+                                title="Activar/Desactivar">
                                 <i class="fas fa-power-off"></i>
                             </button>
                         </td>
