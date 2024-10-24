@@ -129,7 +129,7 @@ def validar_nit(nit):
         return False
     
 
-
+#Validar DPI y NIT
 def validar_dpi(dpi):
     dpi = dpi.replace('-', '').replace(' ', '')  # Elimina guiones y espacios
 
