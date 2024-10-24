@@ -1,0 +1,19 @@
+/* sweetalert2-custom.css */
+.swal2-popup {
+    font-family: 'Arial', sans-serif; /* Cambia la fuente según tu diseño */
+    color: #333; /* Color de texto */
+}
+
+.swal2-title {
+    color: #d33; /* Color del título */
+}
+
+.swal2-confirm {
+    background-color: #3085d6; /* Color del botón de confirmar */
+    border: none;
+}
+
+.swal2-cancel {
+    background-color: #d33; /* Color del botón de cancelar */
+    border: none;
+}

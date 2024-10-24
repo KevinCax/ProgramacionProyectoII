@@ -1,0 +1,55 @@
+.abs-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 90vh;
+  }
+
+  @media screen and (max-width:720px){
+    .marca {
+       display:none;
+    }
+ }
+
+.nav-item:hover{
+background-color: rgba(9, 145, 45, 0.925);
+border-radius: 15px;
+}
+
+.abb-center {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+ }
+
+ p , input[type=text] , input[type=date], input[type=number], input[type=password] {
+    font-weight: 100;
+    font-size: 15px;
+ }
+
+ #id_comentarios { 
+   font-weight: 100;
+   font-size:15px;
+}
+
+table, th, td {
+   font-weight: 100;
+   font-size:15px;
+ }
+
+ select {
+   font-weight: 100 !important;
+   font-size:15px !important;
+ }
+ body {
+    font-family: Arial, Helvetica, sans-serif !important;
+ }
+
+ textarea{
+    font-size: large !important;
+ }
+ .ui-menu .ui-menu-item{
+   background: rgb(91, 94, 91);
+   color: #fff;
+   
+}

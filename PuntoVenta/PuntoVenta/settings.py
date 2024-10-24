@@ -24,12 +24,13 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-=p-f-uw=-5+ail3$fk@b5lv@q25ugw1a-zq*k6c-fgnrfbgq1)'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-=p-f-uw=-5+ail3$fk@b5lv@q25ugw1a-zq*k6c-fgnrfbgq1')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+# '127.0.0.1', 'localhost'
+ALLOWED_HOSTS = ['programacion-proyecto-ii-mfuw.vercel.app']
 
 
 # Application definition
@@ -133,19 +134,18 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'ventas/static'),
 ]
 
-MEDIA_URL = 'media/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-LOGIN_URL = 'login/'  # Cambia esto a la URL de tu página de inicio de sesión
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+LOGIN_URL = 'login/' 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

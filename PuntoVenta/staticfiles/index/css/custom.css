@@ -1,0 +1,39 @@
+h1, .h1 {
+    font-size: 3rem;  
+    color: #1742d2;     
+  }
+
+  .lead {
+    font-size: 1.5rem;  
+    font-weight: 400;   
+  }
+
+
+
+  .btn-editar {
+    font-size: 0.9rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.btn-accion {
+    font-size: 0.9rem;
+    padding: 0.25rem 0.5rem;
+}
+
+
+.opciones-column {
+    width: 40px;
+}
+
+.opciones-column .btn {
+    display: block;
+    width: 100%;
+    padding: 0.1rem;
+    font-size: 0.75rem;
+}
+
+.opciones-column .btn:first-child {
+    margin-bottom: 0.2rem;
+}
+
+

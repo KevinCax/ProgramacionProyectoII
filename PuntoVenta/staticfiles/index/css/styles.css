@@ -1,0 +1,55 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh; 
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: url("../img/fondo2.jpg");
+    background-repeat: no-repeat; 
+    background-position: center; 
+    background-size: cover; 
+}
+
+
+
+/* Estilos del título */
+h1 {
+    font-family: 'Reboto', sans-serif;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: #000000;
+}
+
+/* Estilos del contenedor de contenido */
+
+/* Texto dentro del contenedor */
+p {
+    font-size: 1.2em;
+    margin-bottom: 40px;
+    color: #000000;
+}
+
+/* Botones */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.btn {
+    text-decoration: none;
+    background-color: #3498db;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 5px;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease;
+    margin: 5px;
+}
+
+.btn:hover {
+    background-color: #2980b9;
+}
