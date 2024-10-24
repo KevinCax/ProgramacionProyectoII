@@ -30,7 +30,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-=p-f-uw=-5+ail
 DEBUG = False
 
 # '127.0.0.1', 'localhost'
-ALLOWED_HOSTS = ['programacion-proyecto-ii-mfuw.vercel.app']
+ALLOWED_HOSTS = ['programacion-proyecto-ii-assw.vercel.app']
 
 
 # Application definition
