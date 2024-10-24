@@ -1,5 +1,6 @@
 #!/bin/bash
 
+set -o errexit
 # Instalar dependencias
 pip install -r requirements.txt
 
