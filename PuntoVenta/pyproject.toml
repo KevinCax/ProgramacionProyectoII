@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "puntoventa"
+version = "1.0.0"
+description = "Digital Shop, es una tienda en linea para vender cualquier tipo de producto"
+authors = ["Kevin Cax"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+gunicorn = "^23.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
