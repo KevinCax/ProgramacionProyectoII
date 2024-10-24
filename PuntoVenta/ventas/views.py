@@ -11,7 +11,7 @@ from django.conf import settings
 import os
 from django.db import IntegrityError
 from django.contrib.auth import logout, authenticate, login
-from django.shortcuts import redirect
+from django.shortcuts import render
 
 
 
