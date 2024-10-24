@@ -3,6 +3,8 @@
 # Instalar dependencias
 pip install -r requirements.txt
 
+poetry install
+
 # Ejecutar migraciones
 python manage.py migrate
 
