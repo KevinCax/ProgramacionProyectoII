@@ -1,86 +1,56 @@
 {% extends "base.html" %}
-
 {% load static %}
-{% load widget_tweaks %}
-{% load humanize %}
 
 {% block content %}
 
+<div>
+<div class="row">
+    <div class="col-md-12">
+    <h3 class= "text-center"> Ventas   <i class="far fa-money-bill-alt"></i>
+        <div class="col-md-3 pb-2">
+            <a href="{% url 'AddVenta' %}">
+                <button type="button" class="btn btn-success">
+                    Agregar Venta
+                    <i class="fas fa-plus-circle"></i>
+                </button>
+            </a>
+        </div>
+    </h3>
+    </div>
+</div>
 
-
-<div id="MaterialesModal" class="modal bd-example-modal-lg" style="overflow: scroll;">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header bg-info">
-                <h3 class="modal-title text-dark">Agregar Material</h3>
+    <div class="row">
+        <div class="col-md-12">
             </div>
-            <div class="modal-body" style="overflow:scroll; max-height: 450px;">
-                <table class="table table-hover" id="myTable">
+            <div class="card card-body" style="overflow:scroll">
+                <table class="table table-hover table-primary" id="myTable">
                     <thead>
                         <tr>
                             <th># ID</th>
-                            <th>Descripción</th>
-                            <th>Precio GTQ</th>
-                            <th>Agregar</th>
+                            <th>Fecha</th>
+                            <th>Cantidad</th>
+                            <th>Cliente</th>
+                            <th>Total GTQ</th>
+                            <th>¿Pagado?</th>
+                            <th>Comentarios</th>
+                            <th>Opciones</th>
                         </tr>
                     </thead>
                     <tbody class="text-dark">
-                        {% for i in productos_lista %}
+                        {% for i in ventas %}
                         <tr>
+                            <td>{{forloop.counter}}</td>
                             <td>{{i.id}}</td>
-                            <td>{{i.descripcion}}</td>
-                            <td>GTQ {{i.precio_unitario}}</td>
-                            <td>
-                                <button onclick="addProductList('{{i.id}}', '{{i.descripcion}}','{{i.precio_unitario}}')"
-                                    class="btn btn-success" data-dismiss="modal" type="button">
-                                    <i class="fas fa-share-square"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="4">No hay productos disponibles.</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-footer bg-dark">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">
-                    Cerrar
-                    <i class="fas fa-window-close"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-<div id="ClientesModal" class="modal bd-example-modal-lg" style="overflow: scroll;">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header bg-info">
-                <h3 class="modal-title text-dark">Seleccionar Cliente</h3>
-            </div>
-            <div class="modal-body" style="overflow:scroll; max-height: 450px;">
-                <table class="table table-hover" id="table2">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>NIT / DPI</th>
-                            <th>Nombre</th>
-                            <th>Correo</th>
-                            <th>Seleccionar</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-dark">
-                        {% for i in clientes_lista %}
-                        <tr>
-                            <td>{{ forloop.counter }}</td>
-                            <td>{{i.nit_Cui}}</td>
-                            <td>{{i.nombre}}</td>
-                            <td>{{i.correoElectronico}}</td>
-                            <td>
-                                <button onclick="seleccionarCliente('{{i.nit_Cui}}', '{{i.nombre}}', '{{i.correoElectronico}}')" class="btn btn-success"
-                                    data-dismiss="modal" type="button">
-                                    <i class="fas fa-share-square"></i>
+                            <td>{{i.fecha_pedido}}</td>
+                            <td>{{i.cliente}}</td>
+                            <td>{{i.total}}</td>
+                            <td>{{i.pagado}}</td>
+                            <td>{{i.comentarios}}</td>
+
+                                <button onclick="EstadoProducto('{{ i.codigo }}', '{{ i.estado }}')" 
+                                    class="btn btn-outline-{% if i.estado == 'activo' %}danger{% else %}success{% endif %} btn-sm" 
+                                    title="Activar/Desactivar">
+                                    <i class="fas fa-power-off"></i>
                                 </button>
                             </td>
                         </tr>
@@ -88,425 +58,8 @@
                     </tbody>
                 </table>
             </div>
-            <div class="modal-footer bg-dark">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">
-                    Cerrar
-                    <i class="fas fa-window-close"></i>
-                </button>
-            </div>
         </div>
     </div>
+
 </div>
-<div id="ConfirmacionModal" class="modal bd-example-modal-lg">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header bg-info">
-                <h3 class="modal-title text-dark">Confirmar Pago</h3>
-            </div>
-            <div class="modal-body" style="overflow:scroll; max-height: 450px;">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Método</th>
-                            <th>Monto {{moneda}}</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-dark">
-                        <tr>
-                            <td>Efectivo {{moneda}} : </td>
-                            <td><input type="number" class="form-control" id="efectivo" value="0.00"></td>
-                        </tr>
-                        <tr>
-                            <td>Tarjeta {{moneda}} : </td>
-                            <td><input type="number" class="form-control" id="tarjeta" value="0.00"></td>
-                        </tr>
-                        <tr>
-                            <td>Transferencia {{moneda}} : </td>
-                            <td><input type="number" class="form-control" id="transferencia" value="0.00"></td>
-                        </tr>
-                        <tr>
-                            <td>Vales {{moneda}} : </td>
-                            <td><input type="number" class="form-control" id="vales" value="0.00"></td>
-                        </tr>
-                        <tr>
-                            <td>Otro {{moneda}} : </td>
-                            <td><input type="number" class="form-control" id="otro" value="0.00"></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-footer bg-dark">
-                <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">
-                    Cerrar
-                    <i class="fas fa-window-close"></i>
-                </button>
-                <button onclick="saveData()" id="btn" class="btn btn-success btn-lg">Agregar Venta <i
-                        class="fas fa-money-bill"></i></button>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row mt-5">
-    <div class="col-4">
-        <div class="input-group">
-            <div class="input-group-append pr-1">
-                <h6>Impresión: </h6>
-            </div>
-            <select required name="impresion" class="form-control border border-dark bg-secondary text-white"
-                id="impresion">
-                <option value="1" selected>Ticket</option>
-            </select>
-        </div>
-    </div>
-    <div class="col-4">
-        <div class="input-group">
-            <div class="input-group-append pr-1">
-                <h6>Fecha: </h6>
-            </div>
-            <input required type="date" class="form-control border border-dark bg-secondary text-white" name="fecha"
-                id="fecha" value="{{HOY}}">
-        </div>
-    </div>
-    <div class="col-4">
-        <div class="input-group">
-            <div class="input-group-append pr-1">
-                <h6>¿Desglosar iva?:</h6>
-            </div>
-            <input required type="checkbox" class="form-control border border-dark bg-secondary text-white"
-                name="desglosar" id="desglosar">
-        </div>
-    </div>
-</div>
-<div class="row mt-5">
-    <div class="col-12">
-        <div class="input-group" id="div-cliente">
-            <div class="input-group-append pr-1">
-                <h6>Cliente: </h6><input type="hidden" name="id_cliente" id="id_cliente" value="1" readonly>
-            </div>
-            <input type="text" class="form-control border border-dark text-white bg-secondary"
-                value="{{cliente.nombre}}" id="cliente" name="cliente" readonly>
-            <div class="input-group-append">
-                <a class="btn btn-primary" href="#ClientesModal" data-toggle="modal" data-dismiss="modal">
-                    <i class="fas fa-user-edit"></i>
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row mt-5">
-    <div class="col-md-12 pb-2 mb-2">
-        <div class="input-group">
-            <div class="input-group-append mr-2">
-                Agregar producto:
-            </div>
-            <input type="text" class="form-control border border-dark" placeholder="Ingrese una descripcion" id="search"
-                name="search">
-            <div class="input-group-append">
-                <button onclick="borrarContent()" class="btn btn-outline-danger" type="button"><i
-                        class="fas fa-window-close"></i></button>
-                <a class="btn btn-primary ml-2 border border-dark" href="#MaterialesModal" data-toggle="modal"
-                    data-dismiss="modal"><i class="nav-icon fas fa-boxes"></i>
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row mt-5">
-    <link rel="stylesheet" href="{% static 'index/css/b4.css' %}">
-    <script src="{% static 'index/js/b4.js' %}"></script>
-    <div class="col-md-12" style="overflow:scroll">
-        <table class="table table-secondary" id="tableProducts">
-            <thead>
-                <tr>
-                    <th>Quitar</th>
-                    <th>Descripción</th>
-                    <th>Cantidad</th>
-                    <th>Precio {{moneda}}</th>
-                    <th>Subtotal {{moneda}}</th>
-                </tr>
-            </thead>
-            <tbody class="text-dark">
-            </tbody>
-        </table>
-    </div>
-</div>
-<div class="row mt-3">
-    <div class="col-11 text-right">
-        <h5 class="text-danger font-weight-bold" id="total"> Total: GTQ0.00 </h5>
-    </div>
-</div>
-<div class="row text-center mt-4">
-    <div class="col-12">
-        <button data-toggle="modal" href="#ConfirmacionModal" class="btn btn-success btn-block">Agregar Venta <i
-                class="fas fa-money-bill"></i></button>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-12">
-        <p>
-            <label for="comentarios" class="form-control">Comentarios: </label>
-            <textarea class="form-control border border-dark bg-secondary text-white" id="comentarios"
-                name="comentarios" rows="2" cols="6"></textarea>
-
-    </div>
-</div>
-
-<script>
-    var tableProducts;
-    // Verts variable
-    var verts = {
-        items: {
-            total: 0.00,
-            products: []
-        },
-        calculate: function () {
-            // Calcular subtotal 
-            calculatedtotal = 0;
-
-            $.each(this.items.products, function (pos, dict) {
-
-                calculatedtotal = parseFloat(calculatedtotal) + parseFloat(dict.subtotal);
-
-
-            });
-            this.items.total = parseFloat(calculatedtotal)
-            document.getElementById("total").innerHTML = "Total {{moneda}}" + parseFloat(this.items.total).toFixed(2);
-        },
-
-        list: function () {
-            tableProducts = $('#tableProducts').DataTable({
-                data: this.items.products,
-                columns: [
-                    { "data": "id" },
-                    { "data": "descripcion" },
-                    { "data": "cantidad" },
-                    { "data": "precio" },
-                    { "data": "subtotal" },
-                ],
-                columnDefs: [
-                    {
-                        targets: [0],
-                        class: "text-center",
-                        render: function (data, type, row) {
-                            var buttons = `<a rel="remove" class='btn btn-flat btn-outline-secondary pt-0'><img src="{% static 'index/img/delete.png' %}" alt='Error' width='30'></a>`;
-                            return buttons
-                        }
-                    },
-                    {
-                        targets: [2],
-                        class: "text-right",
-                        render: function (data, type, row) {
-                            var buttons = `<input type="number" name="cant" class="form-control text-center" value="${row.cantidad}">`;
-                            return buttons
-                        }
-                    },
-                    {
-                        targets: [3],
-                        class: "text-center",
-                        render: function (data, type, row) {
-                            var buttons = `<input type="number" name="price" class="form-control text-center" value="${row.precio}">`;
-                            return buttons
-                        }
-                    },
-                    {
-                        targets: [4],
-                        class: "text-center",
-                        render: function (data, type, row) {
-                            return "{{moneda}}" + parseFloat(data).toFixed(2)
-                        }
-                    },
-                ],
-                destroy: true,
-                "language": {
-                    "url": "{% static 'index/js/idiom.json' %}"
-                },
-                "lengthMenu": [[10, 25, 50], [10, 25, 50]],
-                rowCallback(row, data, displayNum, displayIndex, dataIndex) {
-                    //console.log(data);
-
-                },
-            });
-        },
-
-    };
-    // Autocomplete
-    $(function () {
-        $("#search").autocomplete({
-            source: function (request, response) {
-                $.ajax({
-                    url: window.location.pathname,
-                    type: 'POST',
-                    data: {
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                        'action': 'autocomplete',
-                        'term': request.term,
-                    },
-                    dataType: 'json',
-                }).done(function (data) {
-                    response(data);
-                }).fail(
-                    function (jqXHR, textStatus, errorThrown) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: textStatus,
-                            footer: errorThrown
-                        })
-                    }).always(
-                        function (data) {
-                        });
-            },
-            delay: 300,
-            minLength: 2,
-            select: function (event, ui) {
-                event.preventDefault();
-                console.clear();
-                producto = {
-                    id: ui.item.id,
-                    descripcion: ui.item.descripcion,
-                    cantidad: 1,
-                    precio: ui.item.precio,
-                    subtotal: ui.item.precio
-                }
-                verts.items.products.push(producto);
-                verts.list();
-                verts.calculate();
-                $(this).val('');
-            }
-        });
-    });
-
-    // Gudardar datos
-    function saveData() {
-        if (parseFloat(verts.items.total) == 0) {
-            Swal.fire({
-                icon: 'error',
-                title: '',
-                text: "No hay ningún producto agregado a la lista",
-            });
-            //alert('{{last_id}}');
-            return
-        }
-
-        activarEspera();
-        let desglosar;
-        const cb = document.querySelector('#desglosar');
-        if (cb.checked == true){
-            desglosar = 1;
-        }
-        else{
-            desglosar = 0;
-        }
-        $.ajax({
-            url: "{% url 'AddVenta' %}",
-            type: 'POST',
-            data: {
-                csrfmiddlewaretoken: '{{ csrf_token }}',
-                'action': 'save',
-                'fecha': document.getElementById("fecha").value,
-                'id_cliente': document.getElementById("id_cliente").value,
-                'cliente': document.getElementById("cliente").value,
-                'comentarios': document.getElementById("comentarios").value,
-                'ticket': document.getElementById("impresion").value,
-                'efectivo': document.getElementById("efectivo").value,
-                'tarjeta': document.getElementById("tarjeta").value,
-                'transferencia': document.getElementById("transferencia").value,
-                'vales': document.getElementById("vales").value,
-                'otro': document.getElementById("otro").value,
-                'desglosar': desglosar,
-                'verts': JSON.stringify(verts.items),
-            },
-            dataType: 'json',
-        }).done(function (data) {
-            if (data[1] == true){
-                window.open("{% url 'ExportPDF' %}" + data[0] + "/" + data[2], '_blank');
-                location.reload();
-            }
-            //window.open("{% url 'ExportPDF' %}" + data[0], '_blank');
-            //location.reload();
-        }).fail(
-            function (jqXHR, textStatus, errorThrown) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: textStatus,
-                    footer: errorThrown
-                })
-            }).always(
-                function (data) {
-                });
-    }
-
-    $('#tableProducts tbody')
-        // Remover item
-        .on('click', 'a[rel="remove"]', function () {
-            var tr = tableProducts.cell($(this).closest('td, li')).index();
-            verts.items.products.splice(tr.row, 1);
-            verts.list();
-            verts.calculate();
-
-        })
-        // Cambio de cantidad
-        .on('change', "input[name='cant']", function () {
-            console.clear();
-            let cant = parseInt($(this).val());
-            if (isNaN(cant)) {
-                cant = 0;
-                //$(this).val(cant);
-            }
-            var tr = tableProducts.cell($(this).closest('td, li')).index();
-            //console.log(tr);
-            //var data = tableProducts.row(tr.row).data();
-            //console.log(data);
-            verts.items.products[tr.row].cantidad = cant;
-            verts.items.products[tr.row].subtotal = parseFloat(verts.items.products[tr.row].precio) * parseFloat(cant);
-            verts.calculate();
-            verts.list();
-        })
-        // Cambio de precio
-        .on('change', "input[name='price']", function () {
-            console.clear();
-            let precioE = parseFloat($(this).val());
-            if (isNaN(precioE)) {
-                precioE = 0;
-                //$(this).val(cant);
-            }
-            var tr = tableProducts.cell($(this).closest('td, li')).index();
-            //console.log(tr);
-            //var data = tableProducts.row(tr.row).data();
-            //console.log(data);
-            verts.items.products[tr.row].precio = precioE;
-            verts.items.products[tr.row].subtotal = parseFloat(verts.items.products[tr.row].cantidad) * parseFloat(precioE);
-            verts.calculate();
-            verts.list();
-        })
-    // Agregar desde lista 
-    function addProductList(id_producto, descripcion_producto, precio_producto) {
-        producto = {
-            id: id_producto,
-            descripcion: descripcion_producto,
-            cantidad: 1,
-            precio: precio_producto,
-            subtotal: precio_producto,
-        }
-        verts.items.products.push(producto);
-        verts.list();
-        verts.calculate();
-    };
-</script>
-
-{% if messages %}
-{% for message in messages %}
-<script>
-    Swal.fire({
-        icon: 'success',
-        title: 'Confirmación',
-        text: "{{message}}",
-        footer: ""
-    })
-</script>
-{% endfor %}
-{% endif %}
-
 {% endblock %}

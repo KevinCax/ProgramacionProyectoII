@@ -1,7 +1,7 @@
-/*$( document ).ready(function() {
+$( document ).ready(function() {
     // Handler for .ready() called.
     alert('Todo bien');
-  });*/
+  });
 
 
 /*function eliminarEquipo(id) {
@@ -117,22 +117,30 @@ document.getElementById("form_toggle_estado").addEventListener("submit", functio
 });
 
 
-function seleccionarCliente(nit, nombre, correo) {
-  
-  document.getElementById('nit_Cui').value = nit;
-  document.getElementById('nombre').value = nombre;
-  document.getElementById('correoElectronico').value = correo;
+function seleccionarCliente(nitCui, nombre, correoElectronico) {
+  console.log('Nit/CUI:', nitCui);
+  console.log('Nombre:', nombre);
+  console.log('Correo Electrónico:', correoElectronico);
 
-  // Asegúrate de que el modal se cierre correctamente
-  $('#ClientesModal').modal('hide');
-  
-  // Opcional: Puedes agregar un mensaje de confirmación si es necesario
-  Swal.fire({
-      icon: 'success',
-      title: 'Cliente Seleccionado',
-      text: 'Has seleccionado a ' + nombre,
-  });
+  // Asignar valores a los campos del modal
+  const nitCuiElemento = document.getElementById('nitCui');
+  const nombreElemento = document.getElementById('nombre');
+  const correoElemento = document.getElementById('correoElectronico');
+
+  if (nitCuiElemento) {
+      nitCuiElemento.value = nitCui;
+  }
+  if (nombreElemento) {
+      nombreElemento.value = nombre;
+  }
+  if (correoElemento) {
+      correoElemento.value = correoElectronico;
+  }
+
+  $('#ClientesModal').modal('show');
 }
+
+
 
 function editarPersonal(id, nombre, correoElectronico, direccion, notas, estado) {
   document.getElementById("id_personal_editar").value = id;
@@ -185,13 +193,6 @@ function generarCodigo() {
       });
 }
 
-
-
-
-
-
-
-
 function editarUsuario(dpi, nombre, correoElectronico, rol, notas) {
   // Establecer los valores en el formulario
   document.getElementById("dpi_usuario_editar").value = dpi;
@@ -228,9 +229,7 @@ document.getElementById("form_toggle_estado").addEventListener("submit", functio
   console.log("Nuevo estado:", document.getElementById("nuevo_estado_usuario").value);
 });
 
-/*function eliminarUsuario(id) {
-  document.getElementById("id_usuario_eliminar").value = id;
-}*/
+
 
 function activarEspera(){
   const btn = document.getElementById("btn");
@@ -288,3 +287,16 @@ function toggleEstadoUsuario(dpi, estadoActual) {
   // Enviar el formulario
   document.getElementById("form_toggle_estado").submit();
 }
+
+
+
+// Supongamos que verts es una función como la que definimos antes
+function verts(elementId, value) {
+  document.getElementById(elementId).innerHTML = value;
+}
+
+// Actualizas el contenido del elemento con verts
+verts("total", "Total: GTQ " + parseFloat(this.items.total).toFixed(2));
+
+// Luego puedes utilizar JSON.stringify(verts.items) si verts tiene una propiedad 'items'
+let jsonItems = JSON.stringify(this.items);

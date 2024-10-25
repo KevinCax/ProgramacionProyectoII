@@ -12,6 +12,7 @@ import os
 from django.db import IntegrityError
 from django.contrib.auth import logout, authenticate, login
 from django.shortcuts import render
+import json
 
 
 
@@ -285,8 +286,18 @@ def delete_producto_view(request):
 
 # Vista Venta
 
+def ventas_view(request):
+    venta = Egreso.objects.all()
+    num_ventas = len(venta)
+    context = {
+        'ventas': venta,
+        'num_ventas': num_ventas
+    }
+    return render(request, 'ventas.html', context)
+    
+
 class add_ventas(ListView):
-    template_name = 'ventas.html'
+    template_name = 'add_ventas.html'
     model = Egreso
 
     def dispatch(self,request,*args,**kwargs):
@@ -307,6 +318,31 @@ class add_ventas(ListView):
                     item = i.toJSON()
                     item['value'] = i.descripcion
                     data.append(item)
+            elif action == 'save':
+                total_pagado = float(request.POST["efectivo"]) + float(request.POST["tarjeta"]) 
+                + float(request.POST["trasferencia"]) + float(request.POST["vales"]) + float(request.POST["otro"])
+                fecha = request.POST["fecha"]
+                id_cliente = int(request.POST["id_cliente"])
+                Cliente_obj = Cliente.objects.get(pk=id_cliente)
+                datos = json.loads(request.POST["verts"])
+                total_venta = float(datos["total"])
+                ticket_num = int(request.POST["ticket"])
+                if ticket_num == 1:
+                    ticket = True
+                else:
+                    ticket = False
+                
+                desglosar_iva_num = int(request.POST["desglosar"])
+                if desglosar_iva_num == 0:
+                    desglosar_iva = False
+                    
+                elif desglosar_iva_num == 1:
+                    desglosar_iva = True
+                    
+                comentarios = request.POST["comentarios"]
+                nueva_venta = Egreso(fecha_pedido=fecha, cliente=Cliente_obj, total=total_venta, pagado=total_pagado, comentarios=comentarios ,ticket=ticket, desglosar=desglosar_iva)
+                nueva_venta.save()
+                
             else:
                 data['error'] = "Ha ocurrido un error"
         except Exception as e:
@@ -316,10 +352,13 @@ class add_ventas(ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["productos_lista"] = Producto.objects.all()
         context["clientes_lista"] = Cliente.objects.all()
+        context["productos_lista"] = Producto.objects.all()
         return context
-    
+
+
+
+
 def export_pdf_view(request, id, iva):
     #print(id)
     template = get_template("ticket.html")
