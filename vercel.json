@@ -1,4 +1,12 @@
+
+
 {
+    "builds": [
+      {
+        "src": "PuntoVenta/wsgi.py",
+        "use": "@vercel/python"
+      }
+    ],
     "routes": [
       {
         "src": "/(.*)",
