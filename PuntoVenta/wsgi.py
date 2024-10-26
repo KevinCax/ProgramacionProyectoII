@@ -10,7 +10,8 @@ https://docs.djangoproject.com/en/5.1/howto/deployment/wsgi/
 import os
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tu_proyecto.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'PuntoVenta.settings')
+
 app = get_wsgi_application()
 
 
