@@ -321,6 +321,7 @@ class add_ventas(ListView):
             elif action == 'save':
                 total_pagado = float(request.POST["efectivo"]) + float(request.POST["tarjeta"]) 
                 + float(request.POST["trasferencia"]) + float(request.POST["vales"]) + float(request.POST["otro"])
+                
                 fecha = request.POST["fecha"]
                 id_cliente = int(request.POST["id_cliente"])
                 Cliente_obj = Cliente.objects.get(pk=id_cliente)
