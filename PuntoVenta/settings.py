@@ -76,7 +76,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'PuntoVenta.wsgi.application'
+WSGI_APPLICATION = 'PuntoVenta.wsgi.app'
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',  # Backend predeterminado de Django
